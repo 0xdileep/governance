@@ -113,16 +113,6 @@ AI Providers (user-configured API keys)
 4. **Standards & Quality** — Accuracy, reliability, quality assessment
 5. **Legal & Regulatory** — Cross-jurisdictional legal compliance
 
-## Performance
-
-| Metric | Value |
-|--------|-------|
-| Concurrent Requests | 2000+/sec |
-| Cached Response | <100ms |
-| Cache Hit Rate | 70-90% |
-| Cost Savings (batching) | 30-50% |
-| Success Rate | 99.2% |
-
 ## Documentation
 
 - `PROJECT_SUMMARY.md` — Technical architecture overview
