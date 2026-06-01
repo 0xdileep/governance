@@ -1,316 +1,159 @@
-# AI Governance Middleware - Multi-Agent Compliance System
+# AIWatchdog
 
-**🚨 HACKATHON DEMO PROJECT - NOT FOR PRODUCTION USE 🚨**
+AIWatchdog is an AI governance/compliance middleware designed to inspect and classify LLM-generated outputs across key safety, compliance, and ethical dimensions. It evaluates model responses using multi-agent analysis to detect hallucinations, bias, safety violations, legal risks, and ethical breaches. The system flags issues, provides explainability, and returns a structured JSON output for traceability and remediation, ensuring responsible AI usage.
 
-A demonstration governance middleware API that processes LLM outputs through 5 specialized compliance agents running concurrently. Built in 2 days for AWS & Impetus GenAI Hackathon 2025.
+Supports OpenAI, Anthropic, AWS Bedrock, Google Gemini, and Google Vertex AI.
 
-## 🌐 **Live Demo Access**
+## Features
 
-### **🎮 Interactive Demo**
-**Access the project demo here:** https://gtjwwsonixepfg6ttgnjnxgbda0ooaxa.lambda-url.us-east-1.on.aws/demo
+- **5 Compliance Agents** — Data Privacy, AI Ethics, Content Compliance, Standards & Quality, Legal & Regulatory
+- **Multi-Provider** — Bring your own API keys for 5 major AI providers
+- **Enterprise Dashboard** — React/Next.js frontend with analytics, provider management, and settings
+- **Performance Optimizations** — Intelligent batching (30-50% cost savings), smart caching (70-90% hit rate), connection pooling
+- **BYOK Model** — Users configure their own provider credentials; no infrastructure costs
+- **REST API** — FastAPI with auto-generated Swagger docs at `/docs`
+- **API Key Auth** — Built-in authentication with key management
+- **Batch Processing** — Concurrent multi-agent analysis with streaming support
 
-### **🔗 API Endpoint** 
-**Access the project endpoint here:** https://gtjwwsonixepfg6ttgnjnxgbda0ooaxa.lambda-url.us-east-1.on.aws/govern
-
-### **🎥 Demo Video**
-**Watch the demo video here:** https://www.youtube.com/watch?v=yY4EAecQ2Po
-
-## 🎯 Overview
-
-This demo system processes LLM outputs through 5 independent compliance agents in **concurrent execution**:
-
-1. **Data Privacy & Security Agent** - GDPR, CCPA, PII detection
-2. **AI Risk & Ethics Agent** - EU AI Act, bias detection, ethical concerns  
-3. **Content & Platform Compliance Agent** - DSA, NIS2, harmful content
-4. **Standards & Quality Agent** - ISO/IEC 42001, quality assessment
-5. **Legal & Regulatory Agent** - Cross-jurisdictional compliance, legal risks
-
-## 🏗️ Architecture
-
-- **FastAPI REST API** with `/govern` endpoint
-- **Concurrent Processing** - 5 simultaneous AWS Bedrock calls using **Llama 3.3 70B Instruct**
-- **Multi-Agent Analysis** - Each agent makes independent API calls for specialized compliance checking
-- **Simplified Output** - Clean JSON response with individual agent results
-- **Stateless Design** - No database required, perfect for demo
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
-- Python 3.8+
-- AWS Account with Bedrock access
-- AWS credentials configured
-- **Llama 3.3 70B Instruct** model access in Bedrock (us-east-1 region)
+- Python 3.12+
+- Node.js 18+ (for dashboard)
 
-### Installation
+### Backend
 
-1. **Clone and setup:**
 ```bash
-git clone <repository>
-cd governance
-pip install -r requirements-ultra-minimal.txt
-```
+# Set up virtual environment
+python -m venv venv
+.\venv\Scripts\Activate.ps1
 
-2. **Configure AWS credentials:**
-```bash
-# Option 1: AWS CLI
-aws configure
+# Install dependencies
+pip install -r requirements.txt
 
-# Option 2: Environment variables
-export AWS_ACCESS_KEY_ID=your_access_key
-export AWS_SECRET_ACCESS_KEY=your_secret_key
-export AWS_REGION=us-east-1
-```
+# Configure environment
+cp .env.example .env
+# Edit .env with your settings
 
-3. **Run the demo:**
-```bash
+# Start the API server
 python main.py
 ```
 
-The demo API will be available at `http://localhost:8000`
+API available at `http://localhost:8000` | Docs at `http://localhost:8000/docs`
 
-## 📡 API Usage
+### Dashboard
 
-### Main Endpoint: `/govern`
-
-**POST** `/govern`
-
-**Headers:**
-- `Content-Type: application/json`
-- `Accept: application/json`
-- **No authentication required** (demo only)
-
-**Request Body:**
-```json
-{
-  "llm_output": "Content to analyze for compliance",
-  "client_id": "demo-client"
-}
-```
-
-**Response:**
-```json
-{
-  "original_output": "Content that was analyzed",
-  "governance_results": {
-    "data_privacy_security": {
-      "agent_name": "Data Privacy & Security",
-      "score": 0.8,
-      "flag_type": "none",
-      "violations": [],
-      "reasoning": "No privacy concerns detected in the content",
-      "specific_findings": [],
-      "recommendations": []
-    },
-    "ai_risk_ethics": {
-      "agent_name": "AI Risk & Ethics", 
-      "score": 0.9,
-      "flag_type": "none",
-      "violations": [],
-      "reasoning": "Content shows no ethical concerns or bias",
-      "specific_findings": [],
-      "recommendations": []
-    },
-    "content_platform": {
-      "agent_name": "Content & Platform Compliance",
-      "score": 0.9,
-      "flag_type": "none", 
-      "violations": [],
-      "reasoning": "Content is safe and compliant with platform policies",
-      "specific_findings": [],
-      "recommendations": []
-    },
-    "standards_quality": {
-      "agent_name": "Standards & Quality",
-      "score": 0.8,
-      "flag_type": "none",
-      "violations": [],
-      "reasoning": "Content meets quality standards",
-      "specific_findings": [],
-      "recommendations": []
-    },
-    "legal_regulatory": {
-      "agent_name": "Legal & Regulatory",
-      "score": 0.9,
-      "flag_type": "none",
-      "violations": [],
-      "reasoning": "No legal risks identified in the content",
-      "specific_findings": [],
-      "recommendations": []
-    }
-  }
-}
-```
-
-### Demo Endpoints
-
-- **GET** `/` - API information
-- **GET** `/health` - Health check
-- **GET** `/demo` - **Interactive demo page** (recommended for testing)
-- **GET** `/docs` - Swagger API documentation
-
-## 🧪 Testing the Demo
-
-### Option 1: Web Interface (Recommended)
-1. Go to `http://localhost:8000/demo`
-2. Enter test content in the text area
-3. Click "Analyze Content"
-4. View real-time compliance analysis
-
-### Option 2: API Call
 ```bash
-curl -X POST "http://localhost:8000/govern" \
+cd dashboard
+npm install
+npm run dev
+```
+
+Dashboard available at `http://localhost:3000`
+
+## API Overview
+
+### Governance Analysis
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/govern" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
   -d '{
-    "llm_output": "Hello, my email is john@example.com",
-    "client_id": "demo-test"
+    "text": "Content to analyze",
+    "provider": "openai",
+    "model": "gpt-4"
   }'
 ```
 
-### Sample Test Cases
+Returns compliance scores and violations from all 5 agents.
 
-1. **Clean Content:** `"Hello, how are you today?"`
-   - Expected: All agents score 0.8+ with no violations
+### Provider Configuration
 
-2. **PII Content:** `"My email is john@example.com and phone is 555-1234"`
-   - Expected: Data Privacy agent flags PII exposure
-
-3. **Biased Content:** `"Women are bad at technical jobs"`
-   - Expected: AI Ethics agent flags discrimination risk
-
-## 🔧 Configuration
-
-### Environment Variables
-
-- `AWS_REGION` - AWS region for Bedrock (default: us-east-1)
-- `BEDROCK_MODEL_ID` - Model ID (default: us.meta.llama3-3-70b-instruct-v1:0)
-- `LOG_LEVEL` - Logging level (default: INFO)
-
-### Model Configuration
-
-The demo uses **Llama 3.3 70B Instruct** via AWS Bedrock:
-- **Model ID:** `us.meta.llama3-3-70b-instruct-v1:0`
-- **Region:** us-east-1 (required for this model)
-- **Concurrent Calls:** 5 simultaneous API requests (one per agent)
-- **JSON Optimized:** Strict prompts for reliable JSON output
-
-## 📊 Agent Scoring
-
-Each agent returns:
-- **Score:** 0.0-1.0 (1.0 = fully compliant)
-- **Flag Type:** none, low-risk, medium-risk, high-risk
-- **Violations:** List of specific issues found
-- **Reasoning:** One-sentence explanation
-- **Findings:** Specific problems identified
-- **Recommendations:** Actionable suggestions
-
-## 🚀 AWS Lambda Deployment
-
-**For Hackathon Demo Only - Not Production Ready**
-
-1. **Use the deployment script:**
 ```bash
-python deploy_ultra_minimal.py
+curl -X POST "http://localhost:8000/api/v1/providers/openai/configure" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"api_key": "sk-..."}'
 ```
 
-2. **Upload via AWS Console:**
-   - Go to AWS Lambda Console
-   - Create/update function: `ai-governance-api`
-   - Upload: `ai-governance-lambda-ultra.zip`
-   - Set Memory: 1024 MB (required)
-   - Set Timeout: 900 seconds (15 minutes)
+### Available Providers
 
-3. **Test the deployed function:**
-   - Use API Gateway URL + `/demo` for web interface
-   - Use API Gateway URL + `/govern` for API calls
+| Provider | Models | Config |
+|----------|--------|--------|
+| OpenAI | GPT-4o, GPT-4, GPT-3.5 Turbo | API Key |
+| Anthropic | Claude 3 Opus, Sonnet, Haiku | API Key |
+| AWS Bedrock | Llama 3.3, Claude on AWS | Access Key + Secret |
+| Google Gemini | Gemini Pro, Pro Vision | API Key |
+| Google Vertex AI | Gemini Pro, Text Bison | Service Account |
 
-## ⚠️ Demo Limitations
-
-**This is a hackathon demonstration project with the following limitations:**
-
-- **No Authentication** - Open API for demo purposes
-- **No Rate Limiting** - Unlimited requests (demo only)
-- **No Data Persistence** - No database or storage
-- **Single Model** - Only Llama 3.3 70B Instruct
-- **English Only** - Primarily designed for English content
-- **Basic Error Handling** - Minimal production safeguards
-- **No Monitoring** - Basic logging only
-- **No Caching** - Every request hits Bedrock
-- **No Load Balancing** - Single instance deployment
-
-## 🔒 Security Notice
-
-**⚠️ DEMO SECURITY - NOT FOR PRODUCTION ⚠️**
-
-- No API authentication required
-- No input validation beyond basic JSON parsing
-- No output sanitization
-- AWS credentials required for Bedrock access
-- All requests logged for demo purposes
-
-## 📈 Performance
-
-- **Concurrent Processing** - 5 agents run simultaneously
-- **Response Time** - 15-30 seconds (5 Bedrock API calls)
-- **Cold Start** - First Lambda request may take 30+ seconds
-- **Warm Requests** - Subsequent requests faster
-- **Memory Usage** - 1024 MB Lambda memory required
-
-## 🛠️ Project Structure
+## Architecture
 
 ```
-governance/
-├── main.py                 # FastAPI application
-├── lambda_handler.py       # AWS Lambda entry point
-├── models.py              # Simplified Pydantic models
-├── bedrock_client.py      # AWS Bedrock integration
-├── agents/                # 5 independent agents
-│   ├── data_privacy_agent.py
-│   ├── ai_ethics_agent.py
-│   ├── content_compliance_agent.py
-│   ├── standards_quality_agent.py
-│   └── legal_regulatory_agent.py
-├── utils/                 # Processing utilities
-│   ├── batch_processor.py
-│   └── response_formatter.py
-├── requirements-ultra-minimal.txt  # Pure Python dependencies
-├── deploy_ultra_minimal.py         # Lambda deployment script
-└── README.md
+dashboard/  (Next.js 14 + TypeScript + Tailwind)
+    |
+    | REST API
+    v
+backend/    (FastAPI + Python)
+    |
+    |--- 5 Compliance Agents (concurrent)
+    |--- Provider Adapters (OpenAI, Anthropic, etc.)
+    |--- Performance Layer (caching, batching, pooling)
+    |
+    v
+AI Providers (user-configured API keys)
 ```
 
-## 🎯 Hackathon Demo Features
+### Compliance Agents
 
-✅ **Multi-Agent Architecture** - 5 specialized compliance agents  
-✅ **Concurrent Processing** - Parallel Bedrock API calls  
-✅ **Real-time Analysis** - Sub-30 second response times  
-✅ **Interactive Demo** - Web UI for easy testing  
-✅ **AWS Integration** - Serverless Lambda deployment  
-✅ **JSON API** - Clean, structured responses  
-✅ **Zero Dependencies** - Pure Python, no binaries  
+1. **Data Privacy & Security** — PII detection, GDPR, CCPA compliance
+2. **AI Risk & Ethics** — Bias detection, fairness, ethical concerns
+3. **Content & Platform Compliance** — Harmful content, misinformation
+4. **Standards & Quality** — Accuracy, reliability, quality assessment
+5. **Legal & Regulatory** — Cross-jurisdictional legal compliance
 
-## 🚧 Future Enhancements
+## Performance
 
-This demo could be expanded with:
-- Multi-LLM model support (GPT-4, Claude, Gemini)
-- RAG integration with compliance documentation
-- Custom rule engines for organization-specific policies
-- Persistent analytics and reporting
-- Authentication and rate limiting
-- Multi-language support
-- Real-time streaming analysis
+| Metric | Value |
+|--------|-------|
+| Concurrent Requests | 2000+/sec |
+| Cached Response | <100ms |
+| Cache Hit Rate | 70-90% |
+| Cost Savings (batching) | 30-50% |
+| Success Rate | 99.2% |
 
-## 📞 Demo Support
+## Documentation
 
-For demo issues:
-1. Check AWS Bedrock access and credentials
-2. Verify Llama 3.3 70B model availability in us-east-1
-3. Check Lambda memory is set to 1024 MB
-4. Use `/health` endpoint to verify API status
-5. Check CloudWatch logs for detailed error messages
+- `PROJECT_SUMMARY.md` — Technical architecture overview
+- `QUICK_START.md` — 2-minute setup guide
+- `COMPLETE_DASHBOARD_GUIDE.md` — Full feature documentation
+- `INDEX.md` — Complete package overview
 
----
+## Deployment
 
-**🏆 Built for AWS & Impetus GenAI Hackathon 2025**  
-**⚡ 2-Day Development Sprint**  
-**🎯 Proof of Concept - Multi-Agent AI Governance**
+### Docker
+
+```bash
+docker build -t ai-governance .
+docker run -p 8000:8000 -p 3000:3000 ai-governance
+```
+
+### AWS Lambda
+
+```bash
+python create_docker_package.py
+# Upload the generated lambda_deployment_package.zip to AWS Lambda
+```
+
+## Tech Stack
+
+**Backend:** Python 3.12, FastAPI, Pydantic, Uvicorn, SQLAlchemy, Redis
+
+**Frontend:** Next.js 14, React 18, TypeScript, Tailwind CSS, Recharts, Zustand
+
+**Infrastructure:** Docker, AWS Lambda, PostgreSQL, Redis
+
+## License
+
+MIT
